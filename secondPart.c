@@ -25,8 +25,8 @@ double complex secondPart(int l, double gamma, double Lamda, double qSqur)
 //	scanf("%lf %d",&qSqur ,&l);
 
 	double complex secondPartInt = 0+0*I;
-	if(l == 0){
-		secondPartInt = 0;
+	if(l != 0){
+		secondPartInt = 0.0;
 	}
 	else{
 			//problem1: should delete creal and change it to a complex number.
