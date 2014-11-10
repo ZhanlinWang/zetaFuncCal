@@ -1,7 +1,8 @@
 #!/bin/bash
 CC		=	gcc
 CXX		=	g++
-CFLAGS	=	-g -Wall -std=c99
+#CFLAGS	=	-g -Wall -std=c99
+CFLAGS	=	-O2 -Wall -std=c99
 LIBS	=	-L/home/wangzhanlin/opt/lib -lgsl -lgslcblas -lm
 INCLUDE	=	-I/home/wangzhanlin/opt/include 
 all:
