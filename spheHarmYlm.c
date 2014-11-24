@@ -31,19 +31,24 @@ complex spheHarm(int l, int m, double x, double phi)
 //system from the Descartes coordiante x and y.
 double azimutalAngle(double x, double y)
 {
-	double phi;
-	if(x==0 && y==0){
-		phi = 0;
-	}else if(x==0 && y>0){
-		phi = 90;
-	}else if(x==0 && y<0){
-		phi = 270;
-	}else if(x>0 && y<0){
-		phi = atan(y/x)*180/M_PI + 360;
-	}else if(x>0 && y>=0){
-		phi = atan(y/x)*180/M_PI;
-	}else if (x<0)
-		phi = atan(y/x)*180/M_PI + 180;
+	double phi = 0.;
+	if(x==0 && y==0) {
+	  phi = 0;
+	}
+	else if(x==0 && y>0){
+	  phi = 90;
+	}
+	else if(x==0 && y<0){
+	  phi = 270;
+	}
+	else if(x>0 && y<0){
+	  phi = atan(y/x)*180/M_PI + 360;
+	}
+	else if(x>0 && y>=0){
+	  phi = atan(y/x)*180/M_PI;
+	}
+	else if (x<0)
+	  phi = atan(y/x)*180/M_PI + 180;
 	return phi;
 }
 
