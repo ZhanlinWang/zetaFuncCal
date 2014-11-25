@@ -1,3 +1,6 @@
+#ifndef ZETA_FUNC_H
+#define ZETA_FUNC_H
+
 //Main func:
 
 int read_i(char *src,int *data);
@@ -26,3 +29,5 @@ double integrandPart3(double t, void * params);
 double trdInteFunc(double Lamda, int * dVec, int l, double qSqur, int *nVec, double gamma);
 
 double complex thirdPart(int N, int l, int m, int * dVec, double gamma, double Lamda, double qSqur);
+
+#endif
