@@ -6,7 +6,7 @@
 #include "zetaFunc.h"
 
 
-complex double firstPart(int N, int l, int m, double * dVec, double gamma, double Lamda, double qSqur, int * rstatus)
+double complex firstPart(int N, int l, int m, double * dVec, double gamma, double Lamda, double qSqur, int * rstatus)
 {
   //	double qSqur;
   //	int	N;
