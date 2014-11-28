@@ -3,8 +3,7 @@ zetaFuncCal
 
 This a c package for calculating the Luescher zeta function, formula refered to arXiv.org/1107.5023v2.
 
-
-20141111By_wangzl <:
+20141111
 Runnig examples:
 wangzhanlin@InspironN4010:~/Workshop/test/gslTest/zetaFuncCal> time ./zetaFunc < input.para
 N                                       10
@@ -24,4 +23,4 @@ zetaFunc   = 0.312058047452159759149737 +0.000000000000000000000000I.
 real	0m19.174s
 user	0m19.149s
 sys	0m0.002s
-20141111By_wangzl :>
+
