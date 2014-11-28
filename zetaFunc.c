@@ -42,16 +42,14 @@ int main(void)
 	}
 
 	firstPartSum  = firstPart(N, l, m, dVec, gamma, Lamda, qSqur);
+	printf("firstPart  = %.24f %+.24fI\n",creal(firstPartSum),cimag(firstPartSum));
 	secondPartInt = secondPart( l, gamma, Lamda, qSqur);
+	printf("secondPart = %.24f %+.24fI\n",creal(secondPartInt),cimag(secondPartInt));
 	thirdPartSum  = thirdPart(N, l, m, dVec, gamma, Lamda, qSqur);
+	printf("thirdPart  = %.24f %+.24fI\n",creal(thirdPartSum),cimag(thirdPartSum));
 
 	zetaSum = firstPartSum + secondPartInt + thirdPartSum;
-
-	printf("The result of the zeta function:\nfirstPart  = %.24f %+.24fI,\nsecondPart = %.24lf %+.24lfI,\nthirdPart  = %.24lf %+.24lfI,\n\nzetaFunc   = %.24lf %+.24lfI.\n",
-			creal(firstPartSum),cimag(firstPartSum),
-			creal(secondPartInt),cimag(secondPartInt),
-			creal(thirdPartSum),cimag(thirdPartSum),
-			creal(zetaSum),cimag(zetaSum));
+	printf("\nzetaFunc   = %.24f %+.24fI\n",creal(zetaSum),cimag(zetaSum));
 
 	return 0;
 }
