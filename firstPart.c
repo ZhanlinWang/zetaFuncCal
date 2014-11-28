@@ -6,7 +6,7 @@
 #include "zetaFunc.h"
 
 
-complex double firstPart(int N, int l, int m, int * dVec, double gamma, double Lamda, double qSqur)
+complex double firstPart(int N, int l, int m, int * dVec, double gamma, double Lamda, double qSqur, int * rstatus)
 {
   //	double qSqur;
   //	int	N;
@@ -62,7 +62,7 @@ complex double firstPart(int N, int l, int m, int * dVec, double gamma, double L
               rVecMod = sqrt( (pow(nDotd,2.0)/dModSqur + dModSqur/4.0 - nDotd)/pow(gamma,2.0)
                               + nSqur  - pow(nDotd,2.0)/dModSqur);
               cosPolarAngle = ((nDotd*dVec[2]/dModSqur-dVec[2]/2.0)/gamma + (n3-nDotd*dVec[2]/dModSqur))
-                     / rVecMod;
+                / rVecMod;
               azAngle=azimutalAngle((nDotd*dVec[0]/dModSqur-dVec[0]/2.0)/gamma+(n1-nDotd*dVec[0]/dModSqur),
                                     (nDotd*dVec[1]/dModSqur-dVec[1]/2.0)/gamma + (n2-nDotd*dVec[1]/dModSqur));
             }
@@ -75,10 +75,13 @@ complex double firstPart(int N, int l, int m, int * dVec, double gamma, double L
             }
 
             firstTerms = exp(-Lamda*(pow(rVecMod,2.0)-qSqur)) * pow(rVecMod,l)
-              * spheHarm(l, m, cosPolarAngle, azAngle)
+              * spheHarm(l, m, cosPolarAngle, azAngle, rstatus)
               / (pow(rVecMod,2.0) - qSqur);
             //fprintf(fp,"n1=%d,n2=%d,n3=%d:  firstTerm=  %.24f %+.24fI\n",n1,n2,n3,creal(firstTerms), cimag(firstTerms));
-          	firstPartSum += firstTerms;
+            if(*rstatus != 0) {
+              return(firstPartSum);
+            }
+            firstPartSum += firstTerms;
           }
         }
   //fclose(fp);
