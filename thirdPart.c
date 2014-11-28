@@ -5,7 +5,7 @@
 #include <gsl/gsl_math.h>
 #include "zetaFunc.h"
 
-double complex thirdPart(int N, int l, int m, int * dVec, double gamma, double Lamda, double qSqur)
+double complex thirdPart(int N, int l, int m, double * dVec, double gamma, double Lamda, double qSqur)
 {
 //	double qSqur;
 //	int N;
@@ -16,14 +16,14 @@ double complex thirdPart(int N, int l, int m, int * dVec, double gamma, double L
 //	printf("Please input the l and m:\n");
 //	scanf("%d %d", &l, &m);
 //d is the boost-vector,0 for cubic group.
-//	int dVec[3]={0,0,0};
+//	double dVec[3]={0,0,0};
 //Lorenz factor
 //	double gamma = 1 ;
 //Lamda is the partition point of integration range (0, Inf).
 //	double Lamda = 1;
 
 	int n1,n2,n3;
-	int dModSqur = dVec[0]*dVec[0]+dVec[1]*dVec[1]+dVec[2]*dVec[2];
+	double dModSqur = dVec[0]*dVec[0]+dVec[1]*dVec[1]+dVec[2]*dVec[2];
 
 	double complex thirdTerms = 0+I*0, thirdPartSum = 0+I*0;
 	double cosPolarAngle=0,azAngle=0;
@@ -51,6 +51,16 @@ double complex thirdPart(int N, int l, int m, int * dVec, double gamma, double L
 					wVecMod = sqrt((pow(gamma,2)-1) * pow(wDotd,2) /dModSqur
 									+ nSqur);
 					cosPolarAngle=((gamma-1)*wDotd*dVec[2]/dModSqur + n3)/wVecMod;
+
+					
+					if(fabs(cosPolarAngle) > 1) {
+			        // cosPolarAngle must not become larger than 1 
+                    // we check for this here and drop a warning if unexpectedly large
+                    if(fabs(1-cosPolarAngle) > DBL_EPSILON) fprintf(stderr, "Warning, cosPolarAngle > 1 by %e\n", 1-cosPolarAngle);
+		            cosPolarAngle /= fabs(cosPolarAngle);
+					}
+
+
 					azAngle = azimutalAngle((gamma-1)*wDotd*dVec[0]/dModSqur + n1 ,
 									(gamma-1)*wDotd*dVec[1]/dModSqur + n2);
 					thirdTerms = gamma * (cos(M_PI*wDotd) - I*sin(M_PI*wDotd))

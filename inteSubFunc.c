@@ -78,7 +78,7 @@ double integrandPart3(double t, void * params){
 	return f3;
 }
 
-double trdInteFunc(double Lamda, int * dVec, int l, double qSqur, int *nVec, double gamma)
+double trdInteFunc(double Lamda, double * dVec, int l, double qSqur, int *nVec, double gamma)
 {
 	gsl_integration_workspace * w =gsl_integration_workspace_alloc(WSNUM);
 	double result, error;
@@ -90,7 +90,7 @@ double trdInteFunc(double Lamda, int * dVec, int l, double qSqur, int *nVec, dou
 //nVec[2] = n3 = paraArray[7],
 //gamma = paraArray[8]
 
-	double paraArray[9]={ (double)dVec[0], (double)dVec[1], (double)dVec[2],
+	double paraArray[9]={ dVec[0], dVec[1], dVec[2],
 						  (double)l, qSqur,
 						  (double)nVec[0], (double)nVec[1], (double)nVec[2],
 						  gamma

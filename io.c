@@ -4,7 +4,8 @@
 int read_i(char *src,int *data)
 {
   char checkname[60];
-  int err = scanf("%s %d",checkname,data);
+  int err;
+  err = scanf("%s %d",checkname,data);
   if(!strcmp(checkname,src)){
     printf("%-40.40s%d\n",checkname,*data);
     return 1;
@@ -13,12 +14,13 @@ int read_i(char *src,int *data)
     return 0;
 }
 
-int read_a(char *src,int *data)
+int read_a(char *src,double *data)
 {
   char checkname[60];
-  int err = scanf("%s %d %d %d",checkname,data, data+1, data+2);
+  int err;
+  err = scanf("%s %lf %lf %lf",checkname,data, data+1, data+2);
   if(!strcmp(checkname,src)){
-    printf("%-40.40s%d %d %d \n",checkname,*data,*(data+1), *(data+2));
+    printf("%-40.40s%.2lf %.2lf %.2lf \n",checkname,*data,*(data+1), *(data+2));
     return 1;
   }
   else
@@ -28,7 +30,8 @@ int read_a(char *src,int *data)
 int read_d(char *src,double *data)
 {
   char checkname[60];
-  int err = scanf("%s %lf",checkname,data);
+  int err;
+  err = scanf("%s %lf",checkname,data);
   if(!strcmp(checkname,src)){
     printf("%-40.40s %lf\n",checkname,*data);
     return 1;
