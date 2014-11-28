@@ -20,7 +20,7 @@ int main(void)
   //l,m is the parameter of the spherical harmonics
   int l,m;
   //dVec is the boosted vector
-  int dVec[3];
+  double dVec[3];
   //Lorenz forctor
   double gamma;
   //Lamda is the partition point of integration range (0, Inf).
