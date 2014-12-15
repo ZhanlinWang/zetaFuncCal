@@ -28,7 +28,7 @@ int main(void)
 			fprintf(wNousePmode,"pmode=%d has no corresponding points.\n", pmode);
 		else{
 			fprintf(wUsefulPmode,"pmode=%d have %d degenaration DOF.\n", pmode, num);
-			fprintf(wPointSets,"pmode=%d have %d degenaration DOF.\n\n", pmode, num);
+			//fprintf(wPointSets,"pmode=%d have %d degenaration DOF.\n\n", pmode, num);
 		}
 	}
 	fflush(wPointSets);

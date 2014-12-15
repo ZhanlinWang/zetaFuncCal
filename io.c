@@ -33,7 +33,7 @@ int read_d(char *src,double *data)
   int err;
   err = scanf("%s %lf",checkname,data);
   if(!strcmp(checkname,src)){
-    printf("%-40.40s %lf\n",checkname,*data);
+    printf("%-40.40s%le\n",checkname,*data);
     return 1;
   }
   else

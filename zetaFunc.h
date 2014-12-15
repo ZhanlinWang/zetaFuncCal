@@ -14,7 +14,7 @@ double azimutalAngle(const double x, const double y);
 
 complex double spheHarm(const int l, const int m, const double x, const double phi, int * const rstatus);
 
-double complex firstPart(int N, int l, int m, double * dVec, double gamma, double Lamda, double qSqur, int * rstatus);
+double complex firstPart(const double Tolerance, const int l, const int m, const double * dVec, const double gamma, const double Lamda, const double qSqur, const int verbose, int * const rstatus);
 //Second part:
 
 double integrandPart2(const double t, void * const params);
@@ -28,6 +28,6 @@ double integrandPart3(const double t, void * const params);
 
 double trdInteFunc(const double Lamda, double * const dVec, const int l, const double qSqur, int * const nVec, const double gamma, int * const rstatus);
 
-double complex thirdPart(const int N, const int l, const int m, double * const dVec, const double gamma, const double Lamda, const double qSqur, int * const rstatus);
+double complex thirdPart(const double Tolerance, const int l, const int m, double * const dVec, const double gamma, const double Lamda, const double qSqur, const int verbose, int * const rstatus);
 
 #endif
