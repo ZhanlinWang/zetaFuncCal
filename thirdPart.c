@@ -1,9 +1,22 @@
 #include <stdio.h>
 #include <math.h>
 #include <complex.h>
+#include <stdlib.h>
 
 #include <gsl/gsl_math.h>
 #include "zetaFunc.h"
+
+//NPmode should be bigger than the biggest pmodeSqur we may meet in the iteration,
+//DimMax is the biggest degenation degree within the range of NPmode
+//Usually we should set big enough value for these two parameters, 
+//or the program will crash.
+//For precision of 1e-8, (NPmode=40, DimMAX=72) is good enough.
+//
+//Other selections may be 
+//(NPmode=70,DimMAX=96),
+//(NPmode=100,DimMAX=120),
+//(NPmode=145,DimMAX=168)
+//These two parameters are set in the header file zetaFunc.h
 
 double complex thirdPart(const double Tolerance, const int l, const int m, double * const dVec, 
                          const double gamma, const double Lamda, const double qSqur, const int verbose,
@@ -13,44 +26,62 @@ double complex thirdPart(const double Tolerance, const int l, const int m, doubl
   double cosPolarAngle=0,azAngle=0;
   double wVecMod=0;
 
-	//Initialization parameters
 	double error = 1.0;
-	int pmodeSqur, degnrtDOF;
+	int pmodeSqur;
 
   int n1,n2,n3;
   double dModSqur = dVec[0]*dVec[0]+dVec[1]*dVec[1]+dVec[2]*dVec[2];
 
   int s1=0, s2=0;
 
-	FILE * rPointSets, *rUsefulPmode;
-  rPointSets    = fopen("./genDecartesianPointSets.txt","r");
-	rUsefulPmode  = fopen("./genUsefulPmode.txt","r");
+	int * degnrtDOF = NULL;
+	int * arrayPmode= NULL;
 
+  //degnrtDOF[NPmode]
+	if(NULL == (degnrtDOF = (int *)malloc(NPmode*sizeof(int))))
+		printf("Malloc wrong for degnrtDOF!\n");
+  //arrayPmode[NPmode][DimMAX][3]
+		if(NULL == (arrayPmode= (int *)malloc(NPmode*DimMAX*3*sizeof(int))))
+		printf("Malloc wrong for arrayPmode!\n");
+	 
+		int genReturn;
+	  genReturn = gen_points_array(degnrtDOF, arrayPmode, NPmode, DimMAX);
+		 
+		if(genReturn != 0){
+		  printf("Generating the points wrong!");
+			exit(-1);
+		}
+		
+	//From the formula in the paper w!=0,so we start from pmodeSqur=1.
+	pmodeSqur = 1;
+	
 	while(error > Tolerance){
-		fscanf(rUsefulPmode,"pmode=%d have %d degenaration DOF.\n", &pmodeSqur, &degnrtDOF);
 
-		//The following setense is not so formal,it's used to move the file pointer to 
-		//the next pmode 1 points,because point (0, 0, 0) should be passed.
-		fscanf(rPointSets,"%d %d %d", &n1, &n2, &n3);
+		pmodeSum = 0+I*0;
 
 		//From the formula in the paper: w!=0
 		if(pmodeSqur == 0)
 			continue;
-		
-		if(verbose)
-			printf("pmode=%d have %d degenaration DOF.\n", pmodeSqur, degnrtDOF);
 	
-		pmodeSum = 0+I*0;
-		for(int i=0; i<degnrtDOF; i++){
-			//n1,n2,n3 stands for the components of vector w.
-			fscanf(rPointSets,"%d %d %d", &n1, &n2, &n3);
-			if(verbose)
-				printf("%3d %3d %3d\n", n1, n2, n3);
+		//These pmodes has no contribution to the points sets.
+		if(degnrtDOF[pmodeSqur] == 0){
+			pmodeSqur += 1;
+			continue;
+		}
 
-      double nSqur = n1*n1 + n2*n2 + n3*n3;
+		for(int i=0; i<degnrtDOF[pmodeSqur]; i++){
+
+			//n1,n2,n3 stands for the components of vector w.
+			n1=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 0];
+			n2=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 1];
+			n3=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 2];
+
+			if(verbose)
+			  printf("%3d %3d %3d\n", n1, n2, n3);
 
       //nVec needed by the integrand in the exponential
       int nVec[3] = {n1, n2 ,n3};
+      double nSqur = n1*n1 + n2*n2 + n3*n3;
 
       if( dModSqur == 0 ){
         wVecMod = sqrt( nSqur );
@@ -89,26 +120,28 @@ double complex thirdPart(const double Tolerance, const int l, const int m, doubl
 
 			//Add every term within the same pmode into pmodeSum
 			pmodeSum += thirdTerms;
-		}
+		}//end of pmode loop.
       
     thirdPartSum += pmodeSum;
+		//Both pmodeSum and firstPartSum are complex numbers,
+		//cabs take the mode of these variables.
   	error = cabs(pmodeSum) / cabs(thirdPartSum);  
+		
 		if(verbose)
-			printf("pmode=%d error: %.8f\n\n",pmodeSqur , error);
-	}
+			printf("pmode=%d error: %.10f\n\n",pmodeSqur , error);
+	
+		pmodeSqur += 1;
+	}//end of while.
       
   *rstatus = s1 + s2;
+
   //printf("qSqur=%.4f,  thirdPartSum=%.24lf %+.24lfI.\n", qSqur, creal(thirdPartSum),cimag(thirdPartSum));
+	
+	Array_Free(arrayPmode);
+	Array_Free(degnrtDOF);
+
   return thirdPartSum;
 }
 
-				
 
 
-
-
-
-
-
-
-	

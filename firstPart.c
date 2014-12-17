@@ -6,6 +6,17 @@
 
 #include "zetaFunc.h"
 
+//NPmode should be bigger than the biggest pmodeSqur we may meet in the iteration,
+//DimMax is the biggest degenation degree within the range of NPmode
+//Usually we should set big enough value for these two parameters, 
+//or the program will crash.
+//For precision of 1e-8, (NPmode=40, DimMAX=72) is good enough.
+//
+//Other selections may be 
+//(NPmode=70,DimMAX=96),
+//(NPmode=100,DimMAX=120),
+//(NPmode=145,DimMAX=168)
+//These two parameters are set in the header file zetaFunc.h
 
 double complex firstPart(const double Tolerance, const int l, const int m, const double * dVec, const double gamma, const double Lamda, const double qSqur, const int verbose, int * const rstatus)
 {
@@ -13,28 +24,63 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
   double cosPolarAngle,azAngle;
   double rVecMod;
 
-	//Initialization parameters
 	double error = 1.0;
-	int pmodeSqur, degnrtDOF;
+	int pmodeSqur;
 	
 	int n1,n2,n3;
   double dModSqur=dVec[0]*dVec[0]+dVec[1]*dVec[1]+dVec[2]*dVec[2];
 
-	FILE * rPointSets, *rUsefulPmode;
-	rPointSets 		= fopen("./genDecartesianPointSets.txt","r");
-	rUsefulPmode 	= fopen("./genUsefulPmode.txt","r");
+	int * degnrtDOF = NULL;
+	int * arrayPmode= NULL;
+
+	//Using these two function will lead to Segmentation Fault
+	//Array_Alloc(degnrtDOF, NPmode, 1, 1);
+	//Array_Alloc(arrayPmode, NPmode, DimMAX, 3);
+
+	//degnrtDOF[NPmode]
+	if(NULL == (degnrtDOF = (int *)malloc(NPmode*sizeof(int))))
+		printf("Malloc wrong for degnrtDOF!\n");
+	//arrayPmode[NPmode][DimMAX][3]
+	if(NULL == (arrayPmode= (int *)malloc(NPmode*DimMAX*3*sizeof(int))))
+		printf("Malloc wrong for arrayPmode!\n");
+
+	int genReturn;
+	genReturn = gen_points_array(degnrtDOF, arrayPmode, NPmode, DimMAX);
+
+	if(genReturn != 0){
+		printf("Generating the points wrong!");
+		exit(-1);
+	}
+	
+	if(verbose){
+		for(int i=0; i<NPmode; i++){
+			if(degnrtDOF[i] == 0)
+        printf("pmodeSqur=%d has no corresponding points.\n", i);
+			else
+				printf("pmodeSqur=%d have %d degenaration DOF.\n", i, degnrtDOF[i]);
+		}
+	}
+
+	pmodeSqur = 0;
 
 	while(error > Tolerance){
-		fscanf(rUsefulPmode,"pmode=%d have %d degenaration DOF.\n", &pmodeSqur, &degnrtDOF);
-		if(verbose)
-			printf("Pmode=%d have %d degenaration DOF.\n", pmodeSqur, degnrtDOF);
 
 		pmodeSum = 0+I*0;
-		for(int i=0; i<degnrtDOF; i++){
-			fscanf(rPointSets,"%d %d %d", &n1, &n2, &n3);
+
+		//These pmodes has no contribution to the points sets.
+		if(degnrtDOF[pmodeSqur] == 0){
+			pmodeSqur += 1;
+			continue;
+		}
+
+		for(int i=0; i<degnrtDOF[pmodeSqur]; i++){
+			n1=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 0];
+			n2=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 1];
+			n3=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 2];
+			
 			if(verbose)
 				printf("%3d %3d %3d\n", n1, n2, n3);
-      
+
 			double nSqur = n1*n1+n2*n2+n3*n3; 
 
 			if( dModSqur == 0 ){
@@ -68,37 +114,34 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
       firstTerms = exp(-Lamda*(pow(rVecMod,2.0)-qSqur)) * pow(rVecMod,l)
         * spheHarm(l, m, cosPolarAngle, azAngle, rstatus)
         / (pow(rVecMod,2.0) - qSqur);
-      if(*rstatus != 0) {
+      
+			if(*rstatus != 0) {
         return(firstPartSum);
       }
 			
 			//Add every term within the same pmode into pmodeSum
 			pmodeSum += firstTerms;
-		}
+
+		}//end of pmode loop
 
 		firstPartSum += pmodeSum;
-		//Both pmodeSum and firstPartSum are complex numbers,cabs take the mode of these variables.
+		//Both pmodeSum and firstPartSum are complex numbers,
+		//cabs take the mode of these variables.
 		error = cabs(pmodeSum) / cabs(firstPartSum);
+		
 		if(verbose)
-			printf("pmode%d error: %.8f\n\n",pmodeSqur , error);
-	}
+			printf("pmode%d error: %.10f\n\n",pmodeSqur , error);
+		
+		pmodeSqur += 1;
+	}//end of while.
 
   //printf("qSqur=%.4f,	 firstPartSum = %.24f %+.24fI.\n",qSqur, creal(firstPartSum), cimag(firstPartSum));
-  return firstPartSum;
+
+	Array_Free(arrayPmode);
+	Array_Free(degnrtDOF);
+
+	return firstPartSum;
 }
 				
 
 
-
-
-
-/*
-		double coordntArray[][3];
-		if(NULL == (* coordntArray = (double)malloc(degnrtDOF*3*sizeof(double)))){
-			printf("Error mallocing for Descartesian coordinate sets.\n");
-			exit(-1);
-		}
-
-			fscanf(rPointSets,"%d %d %d",(*coordntArray + i), (*coordntArray + i)+1, (coordntArray + i)+2);
-			printf("%3d %3d %3d\n",(*coordntArray + i)[0], (*coordntArray + i)[1], (*coordntArray + i)[2]);
-*/
