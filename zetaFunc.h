@@ -3,16 +3,18 @@
 
 //NPmode should be bigger than the biggest pmodeSqur we may meet in the iteration,
 //DimMax is the biggest degenation degree within the range of NPmode
-//Usually we should set big enough value for these two parameters, 
-//or the program will crash.
+//Usually we should set big enough value for these two parameters or the program will crash.
 //For precision of 1e-8, (NPmode=40, DimMAX=72) is good enough.
+//Actually,by my test NPmode=40 can be selected up to precision 1e-11 for usual case.
 //
 //Other selections may be 
-//(NPmode=70,DimMAX=96),
+//(NPmode=70,DimMAX=96)
+//NPmode=70 can be selected up to precision 1e-16 for usual case.
+//
 //(NPmode=100,DimMAX=120),
 //(NPmode=145,DimMAX=168)
-#define NPmode  40
-#define DimMAX  72
+#define NPmode  70
+#define DimMAX  96
 
 
 //Main func:

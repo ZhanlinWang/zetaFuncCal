@@ -64,6 +64,11 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
 	pmodeSqur = 0;
 
 	while(error > Tolerance){
+		
+		if(pmodeSqur > NPmode){
+			printf("The tolerance requisition has exceeded the pmodeSqur upper limit set by NPmode!\nPlease increase the macro definition of NPmode and DimMax in the head file zetaFunc.h!\n");
+			exit(-1);
+		}
 
 		pmodeSum = 0+I*0;
 
@@ -130,9 +135,10 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
 		error = cabs(pmodeSum) / cabs(firstPartSum);
 		
 		if(verbose)
-			printf("pmode%d error: %.10f\n\n",pmodeSqur , error);
+			printf("pmode%d error: %.16f\n\n",pmodeSqur , error);
 		
 		pmodeSqur += 1;
+
 	}//end of while.
 
   //printf("qSqur=%.4f,	 firstPartSum = %.24f %+.24fI.\n",qSqur, creal(firstPartSum), cimag(firstPartSum));
