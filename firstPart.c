@@ -23,72 +23,61 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
   double complex firstTerms=0+I*0, pmodeSum=0+I*0, firstPartSum=0+I*0;
   double cosPolarAngle,azAngle;
   double rVecMod;
-
-	double error = 1.0;
-	int pmodeSqur;
-	
-	int n1,n2,n3;
+  
+  double error = 1.0;
+  int pmodeSqur;
+  
+  int n1,n2,n3;
   double dModSqur=dVec[0]*dVec[0]+dVec[1]*dVec[1]+dVec[2]*dVec[2];
-
-	int * degnrtDOF = NULL;
-	int * arrayPmode= NULL;
-
-	//Using these two function will lead to Segmentation Fault
-	//Array_Alloc(degnrtDOF, NPmode, 1, 1);
-	//Array_Alloc(arrayPmode, NPmode, DimMAX, 3);
-
-	//degnrtDOF[NPmode]
-	if(NULL == (degnrtDOF = (int *)malloc(NPmode*sizeof(int))))
-		printf("Malloc wrong for degnrtDOF!\n");
-	//arrayPmode[NPmode][DimMAX][3]
-	if(NULL == (arrayPmode= (int *)malloc(NPmode*DimMAX*3*sizeof(int))))
-		printf("Malloc wrong for arrayPmode!\n");
-
-	int genReturn;
-	genReturn = gen_points_array(degnrtDOF, arrayPmode, NPmode, DimMAX);
-
-	if(genReturn != 0){
-		printf("Generating the points wrong!");
-		exit(-1);
-	}
-	
-	if(verbose){
-		for(int i=0; i<NPmode; i++){
-			if(degnrtDOF[i] == 0)
-        printf("pmodeSqur=%d has no corresponding points.\n", i);
-			else
-				printf("pmodeSqur=%d have %d degenaration DOF.\n", i, degnrtDOF[i]);
-		}
-	}
-
-	pmodeSqur = 0;
-
-	while(error > Tolerance){
-		
-		if(pmodeSqur > NPmode){
-			printf("The tolerance requisition has exceeded the pmodeSqur upper limit set by NPmode!\nPlease increase the macro definition of NPmode and DimMax in the head file zetaFunc.h!\n");
-			exit(-1);
-		}
-
-		pmodeSum = 0+I*0;
-
-		//These pmodes has no contribution to the points sets.
-		if(degnrtDOF[pmodeSqur] == 0){
-			pmodeSqur += 1;
-			continue;
-		}
-
-		for(int i=0; i<degnrtDOF[pmodeSqur]; i++){
-			n1=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 0];
-			n2=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 1];
-			n3=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 2];
-			
-			if(verbose)
-				printf("%3d %3d %3d\n", n1, n2, n3);
-
-			double nSqur = n1*n1+n2*n2+n3*n3; 
-
-			if( dModSqur == 0 ){
+  
+  int * degnrtDOF = NULL;
+  int * arrayPmode= NULL;
+  
+  int genReturn;
+  genReturn = gen_points_array(&degnrtDOF, &arrayPmode, NPmode, DimMAX);
+  
+  if(genReturn != 0){
+    printf("Generating the points wrong!");
+    exit(-1);
+  }
+  
+  if(verbose){
+    for(int i=0; i<NPmode; i++){
+      if(degnrtDOF[i] == 0)
+	printf("pmodeSqur=%d has no corresponding points.\n", i);
+      else
+	printf("pmodeSqur=%d have %d degenaration DOF.\n", i, degnrtDOF[i]);
+    }
+  }
+  
+  pmodeSqur = 0;
+  
+  while(error > Tolerance){
+    
+    if(pmodeSqur > NPmode){
+      printf("The tolerance requisition has exceeded the pmodeSqur upper limit set by NPmode!\nPlease increase the macro definition of NPmode and DimMax in the head file zetaFunc.h!\n");
+      exit(-1);
+    }
+    
+    pmodeSum = 0+I*0;
+    
+    //These pmodes has no contribution to the points sets.
+    if(degnrtDOF[pmodeSqur] == 0){
+      pmodeSqur += 1;
+      continue;
+    }
+    
+    for(int i=0; i<degnrtDOF[pmodeSqur]; i++){
+      n1=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 0];
+      n2=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 1];
+      n3=arrayPmode[pmodeSqur*DimMAX*3 + i*3 + 2];
+      
+      if(verbose)
+	printf("%3d %3d %3d\n", n1, n2, n3);
+      
+      double nSqur = n1*n1+n2*n2+n3*n3; 
+      
+      if( dModSqur == 0 ){
         rVecMod = sqrt( nSqur );
         if(n1==0 && n2==0 && n3==0){
           cosPolarAngle =0;
@@ -140,11 +129,6 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
 		pmodeSqur += 1;
 
 	}//end of while.
-
-  //printf("qSqur=%.4f,	 firstPartSum = %.24f %+.24fI.\n",qSqur, creal(firstPartSum), cimag(firstPartSum));
-
-	Array_Free(arrayPmode);
-	Array_Free(degnrtDOF);
 
 	return firstPartSum;
 }

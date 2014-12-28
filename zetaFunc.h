@@ -24,9 +24,8 @@ int read_d(char *src, double *data);
 int read_a(char *src, double *data);
 
 
-int gen_points_array(int * degnrtDOF, int * arrayPmode, int npmod, int dimmax);
-//void Array_Alloc(int *arrayPoidts, int npmode, int dimmax, int innerdim);
-void Array_Free(int * array);
+int gen_points_array(int ** degnrtDOF, int ** arrayPmode, const int npmod, const int dimmax);
+void pmode_free_arrays();
 
 //First part:
 

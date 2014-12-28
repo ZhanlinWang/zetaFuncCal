@@ -7,6 +7,7 @@
 #include <Rdefines.h>
 
 #include "luscherZeta.h"
+void pmode_free_arrays();
 
 SEXP LuscherZetaArray(SEXP qsq_, SEXP n_, SEXP l_, SEXP m_, SEXP dvec_, SEXP gamma_, SEXP lambda_, SEXP tol_, SEXP verbose_) {
 
@@ -55,6 +56,7 @@ SEXP LuscherZetaArray(SEXP qsq_, SEXP n_, SEXP l_, SEXP m_, SEXP dvec_, SEXP gam
   }
 
   UNPROTECT(10);
+  pmode_free_arrays();
   return(res);
 
 }

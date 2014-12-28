@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <complex.h>
-
+#include "luscherZeta.h"
 #include "zetaFunc.h"
 
 int main(void)
@@ -70,10 +70,10 @@ int main(void)
   printf("\nzetaFunc   = %.24f %+.24fI\n",creal(zetaSum),cimag(zetaSum));
 
   if(verbose) {
-    luscherZeta(&zetaSum, qSqur, l, m, gamma, Lamda, dVec, Tolerance, verbose, errorcode);
+    luscherZeta((double*)&zetaSum, qSqur, l, m, gamma, Lamda, dVec, Tolerance, verbose, errorcode);
     printf("\nzetaFunc   = %.24f %+.24fI from call to luscherZeta\n",creal(zetaSum),cimag(zetaSum));
   }
-	
+  pmode_free_arrays();
   return 0;
 }
 
