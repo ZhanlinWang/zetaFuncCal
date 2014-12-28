@@ -7,8 +7,8 @@ INCLUDE	=
 
 all: zetaFunc
 
-zetaFunc: zetaFunc.o firstPart.o secondPart.o thirdPart.o spheHarmYlm.o inteSubFunc.o io.o Makefile
-	${CC} -o zetaFunc zetaFunc.o firstPart.o secondPart.o thirdPart.o spheHarmYlm.o inteSubFunc.o io.o ${LIBS}
+zetaFunc: zetaFunc.o firstPart.o secondPart.o thirdPart.o spheHarmYlm.o inteSubFunc.o io.o gen_points_array.o Makefile
+	${CC} -o zetaFunc zetaFunc.o firstPart.o secondPart.o thirdPart.o spheHarmYlm.o inteSubFunc.o io.o gen_points_array.o ${LIBS}
 
 %.o: %.c Makefile
 	${CC} ${CFLAGS} ${INCLUDE} -o $@ -c $<
