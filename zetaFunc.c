@@ -68,6 +68,11 @@ int main(void)
   
   zetaSum = firstPartSum + secondPartInt + thirdPartSum;
   printf("\nzetaFunc   = %.24f %+.24fI\n",creal(zetaSum),cimag(zetaSum));
+
+  if(verbose) {
+    luscherZeta(&zetaSum, qSqur, l, m, gamma, Lamda, dVec, Tolerance, verbose, errorcode);
+    printf("\nzetaFunc   = %.24f %+.24fI from call to luscherZeta\n",creal(zetaSum),cimag(zetaSum));
+  }
 	
   return 0;
 }
