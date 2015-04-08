@@ -37,21 +37,15 @@ double complex thirdPart(const double Tolerance, const int l, const int m, doubl
 	int * degnrtDOF = NULL;
 	int * arrayPmode= NULL;
 
-  //degnrtDOF[NPmode]
-	if(NULL == (degnrtDOF = (int *)malloc(NPmode*sizeof(int))))
-		printf("Malloc wrong for degnrtDOF!\n");
-  //arrayPmode[NPmode][DimMAX][3]
-		if(NULL == (arrayPmode= (int *)malloc(NPmode*DimMAX*3*sizeof(int))))
-		printf("Malloc wrong for arrayPmode!\n");
-	 
-		int genReturn;
-	  genReturn = gen_points_array(degnrtDOF, arrayPmode, NPmode, DimMAX);
-		 
-		if(genReturn != 0){
-		  printf("Generating the points wrong!");
-			exit(-1);
-		}
-		
+	
+	int genReturn;
+	genReturn = gen_points_array(&degnrtDOF, &arrayPmode, NPmode, DimMAX);
+	
+	if(genReturn != 0){
+	  printf("Generating the points wrong!");
+	  exit(-1);
+	}
+	
 	//From the formula in the paper w!=0,so we start from pmodeSqur=1.
 	pmodeSqur = 1;
 	
@@ -140,11 +134,6 @@ double complex thirdPart(const double Tolerance, const int l, const int m, doubl
 	}//end of while.
       
   *rstatus = s1 + s2;
-
-  //printf("qSqur=%.4f,  thirdPartSum=%.24lf %+.24lfI.\n", qSqur, creal(thirdPartSum),cimag(thirdPartSum));
-	
-	Array_Free(arrayPmode);
-	Array_Free(degnrtDOF);
 
   return thirdPartSum;
 }

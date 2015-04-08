@@ -1,7 +1,8 @@
-N			10
+Tolerance		1.e-6
 l			0
 m			0
 dVec		0 	0 	1	
 gamma		1
 Lamda		1
 qSqur		0.5
+verbose         0
