@@ -126,14 +126,14 @@ double complex thirdPart(const double Tolerance, const int l, const int m, doubl
 		//Both pmodeSum and firstPartSum are complex numbers,
 		//cabs take the mode of these variables.
     // only calculate new error if firstPartSum != 0.
-    if (firstPartSum != 0.)
+    if (thirdPartSum != 0.)
       error = cabs(pmodeSum) / cabs(firstPartSum);
 		
 		if(verbose)
 			printf("pmode=%d error: %.16f\n\n",pmodeSqur , error);
 	
     // if the result is still zero after 4 iterations it is assumed to stay zero
-    if (result == 0. && niter > 4)
+    if (thirdPartSum == 0. && niter > 4)
       break;
 		pmodeSqur += 1;
     ++niter;

@@ -133,7 +133,7 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
       printf("pmode%d error: %.16f\n\n",pmodeSqur , error);
     
     // if the result is still zero after 4 iterations it is assumed to stay zero
-    if (result == 0. && niter > 4)
+    if (firstPartSum == 0. && niter > 4)
       break;
     pmodeSqur += 1;
     ++niter;
