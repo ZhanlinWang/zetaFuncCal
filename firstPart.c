@@ -104,7 +104,7 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
       if(fabs(cosPolarAngle) > 1) {
         // cosPolarAngle must not become larger than 1 
         // we check for this here and drop a warning if unexpectedly large
-        if(fabs(1-fabs(cosPolarAngle)) > DBL_EPSILON) fprintf(stderr, "Warning, cosPolarAngle > 1 by %e\n", 1-fabs(cosPolarAngle));
+        if(fabs(1-fabs(cosPolarAngle)) > DBL_EPSILON*10) fprintf(stderr, "Warning, cosPolarAngle > 1 by %e\n", 1-fabs(cosPolarAngle));
         cosPolarAngle /= fabs(cosPolarAngle);
       }
       
@@ -126,14 +126,14 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
     //Both pmodeSum and firstPartSum are complex numbers,
     //cabs take the mode of these variables.
     // only calculate new error if firstPartSum != 0.
-    if (firstPartSum != 0.)
+    if (cabs(firstPartSum) > DBL_EPSILON)
       error = cabs(pmodeSum) / cabs(firstPartSum);
     
     if(verbose)
       printf("pmode%d error: %.16f\n\n",pmodeSqur , error);
     
     // if the result is still zero after 4 iterations it is assumed to stay zero
-    if (firstPartSum == 0. && niter > 4)
+    if (cabs(firstPartSum) < DBL_EPSILON && niter > 4)
       break;
     pmodeSqur += 1;
     ++niter;
