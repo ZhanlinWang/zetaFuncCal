@@ -108,7 +108,7 @@ double complex thirdPart(const double Tolerance, const int l, const int m, doubl
           if(fabs(1-cosPolarAngle) > DBL_EPSILON*10) fprintf(stderr, "Warning, cosPolarAngle > 1 by %e in thirdPart\n", 1-cosPolarAngle);
 	  if(fabs(1-fabs(cosPolarAngle)) > DBL_EPSILON*100) {
 	    fprintf(stderr, "wVecMod: %e\n", wVecMod);
-	    *rstatus = 1;
+	    *rstatus = 13;
 	    return(thirdPartSum);
 	  }
 

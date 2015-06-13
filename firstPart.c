@@ -110,7 +110,7 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
         if(fabs(1-fabs(cosPolarAngle)) > DBL_EPSILON*10) fprintf(stderr, "Warning, cosPolarAngle > 1 by %e in firstPart.c\n", 1-fabs(cosPolarAngle));
 	if(fabs(1-fabs(cosPolarAngle)) > DBL_EPSILON*100) {
 	  fprintf(stderr, "rVecMod: %e, dModSqur %e n: %d %d %d nSqur %e\n", rVecMod, dModSqur, n1, n2, n3, nSqur);
-	  *rstatus = 1;
+	  *rstatus = 13;
 	  return(firstPartSum);
 	}
         cosPolarAngle /= fabs(cosPolarAngle);
