@@ -12,16 +12,16 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
   double complex firstTerms=0+I*0, pmodeSum=0+I*0, firstPartSum=0+I*0;
   double cosPolarAngle,azAngle;
   double rVecMod;
-  int npmode[2] = {40, 72};
-  int i_npmode=1;
+  unsigned int npmode[2] = {40, 72};
+  unsigned int i_npmode=1;
   
   double error = 1.0;
-  int pmodeSqur;
+  unsigned int pmodeSqur;
   
   int n1, n2, n3;
   double dModSqur=dVec[0]*dVec[0]+dVec[1]*dVec[1]+dVec[2]*dVec[2];
   
-  int * degnrtDOF = NULL;
+  unsigned int * degnrtDOF = NULL;
   int * arrayPmode= NULL;
   
   int niter = 0;
@@ -72,7 +72,7 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
       continue;
     }
     
-    for(int i = 0; i < degnrtDOF[pmodeSqur]; i++){
+    for(unsigned int i = 0; i < degnrtDOF[pmodeSqur]; i++){
 
       n1 = arrayPmode[pmodeSqur*npmode[1]*3 + i*3 + 0];
       n2 = arrayPmode[pmodeSqur*npmode[1]*3 + i*3 + 1];

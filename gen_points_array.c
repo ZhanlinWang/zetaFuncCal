@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 static int pmodes_initialised = 0;
-static int * degnrtDOF = NULL;
+static unsigned int * degnrtDOF = NULL;
 static int * arrayPmode = NULL;
 
 //NPmode should be bigger than the biggest pmodeSqur we may meet in the iteration,
@@ -20,7 +20,7 @@ static int * arrayPmode = NULL;
 //(NPmode=145,DimMAX=168)
 
 
-void get_npmode(int * pair, const int i) {
+void get_npmode(unsigned int * pair, const unsigned int i) {
 
   if(i < 2) {
     pair[0] = 70;
@@ -53,14 +53,14 @@ void pmode_free_arrays() {
 }
 
 
-int gen_points_array(int ** _degnrtDOF, int ** _arrayPmode, const int NPmode, const int DimMAX) {	
-  static int _NPmode = 0;
-  static int _DimMAX = 0;
+int gen_points_array(unsigned int ** _degnrtDOF, int ** _arrayPmode, const unsigned int NPmode, const unsigned int DimMAX) {	
+  static unsigned int _NPmode = 0;
+  static unsigned int _DimMAX = 0;
 
   if(!pmodes_initialised || NPmode > _NPmode || DimMAX >  _DimMAX) {
     pmode_free_arrays();
 
-    if(NULL == (degnrtDOF = (int *)malloc(NPmode*sizeof(int)))) {
+    if(NULL == (degnrtDOF = (unsigned int *)malloc(NPmode*sizeof(unsigned int)))) {
       printf("Malloc wrong for degnrtDOF!\n");
       return(-1);
     }
@@ -73,15 +73,14 @@ int gen_points_array(int ** _degnrtDOF, int ** _arrayPmode, const int NPmode, co
     _NPmode = NPmode;
     _DimMAX = DimMAX;
 
-    for(int pmodeSqur = 0; pmodeSqur < _NPmode; pmodeSqur++) {
+    for(unsigned int pmodeSqur = 0; pmodeSqur < _NPmode; pmodeSqur++) {
       int r = (int)(floor(sqrt(pmodeSqur)));
-      int num = 0;
-      
-      for(int x = -r; x <= r; x++)
-	for(int y = -r; y <= r; y++)
-	  for(int z = -r; z <= r; z++){
+      unsigned int num = 0;
+      for(int x = -r; x <= r; x++) {
+	for(int y = -r; y <= r; y++) {
+	  for(int z = -r; z <= r; z++) {
 	    
-	    if(x*x+y*y+z*z == pmodeSqur){
+	    if(x*x+y*y+z*z == pmodeSqur) {
 	      arrayPmode[pmodeSqur*_DimMAX*3 + num*3 + 0] = x;
 	      arrayPmode[pmodeSqur*_DimMAX*3 + num*3 + 1] = y;
 	      arrayPmode[pmodeSqur*_DimMAX*3 + num*3 + 2] = z;
@@ -89,12 +88,15 @@ int gen_points_array(int ** _degnrtDOF, int ** _arrayPmode, const int NPmode, co
 	      num++;
 	    }
 	  }
+        }
+      }
       
-      //degnrtDOF also record those pmodeSqur without any
-      //corresponding points, in which case num = 0;
+      // degnrtDOF also records those pmodeSqur without any
+      // corresponding points, in which case num = 0;
       degnrtDOF[pmodeSqur] = num;
     }
   }
+
   *_degnrtDOF = degnrtDOF;
   *_arrayPmode = arrayPmode;
 

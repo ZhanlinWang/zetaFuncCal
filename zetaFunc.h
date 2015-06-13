@@ -9,8 +9,8 @@ int read_d(char *src, double *data);
 int read_a(char *src, double *data);
 
 
-void get_npmode(int * pair, const int i);
-int gen_points_array(int ** degnrtDOF, int ** arrayPmode, const int npmod, const int dimmax);
+void get_npmode(unsigned int * pair, const unsigned int i);
+int gen_points_array(unsigned int ** degnrtDOF, int ** arrayPmode, const unsigned int npmod, const unsigned int dimmax);
 void pmode_free_arrays();
 
 //First part:
