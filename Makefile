@@ -1,7 +1,7 @@
 #!/bin/bash
 CC		=	gcc
 CXX		=	g++
-CFLAGS	=	-g -Wall -std=c99 -O3
+CFLAGS	=	-g -Wall -pedantic-errors -std=c99 -O3
 LIBS	=	-lgsl -lgslcblas -lm
 INCLUDE	=	
 
