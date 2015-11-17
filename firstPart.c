@@ -98,10 +98,16 @@ double complex firstPart(const double Tolerance, const int l, const int m, const
         double nDotd = n1*dVec[0]+n2*dVec[1]+n3*dVec[2];
         rVecMod = sqrt( (pow(nDotd,2.0)/dModSqur + dModSqur/4.0 - nDotd)/pow(gamma,2.0)
                         + nSqur  - pow(nDotd,2.0)/dModSqur);
-        cosPolarAngle = ((nDotd*dVec[2]/dModSqur-dVec[2]/2.0)/gamma + (n3-nDotd*dVec[2]/dModSqur))
-          / rVecMod;
-        azAngle=azimutalAngle((nDotd*dVec[0]/dModSqur-dVec[0]/2.0)/gamma+(n1-nDotd*dVec[0]/dModSqur),
+        if(rVecMod < DBL_EPSILON){
+        	cosPolarAngle = 1.;
+        	azAngle = 0.;
+        }
+        else{
+        	cosPolarAngle = ((nDotd*dVec[2]/dModSqur-dVec[2]/2.0)/gamma + (n3-nDotd*dVec[2]/dModSqur))
+          	/ rVecMod;
+        	azAngle=azimutalAngle((nDotd*dVec[0]/dModSqur-dVec[0]/2.0)/gamma+(n1-nDotd*dVec[0]/dModSqur),
                               (nDotd*dVec[1]/dModSqur-dVec[1]/2.0)/gamma + (n2-nDotd*dVec[1]/dModSqur));
+        }
       }
 
       if(fabs(cosPolarAngle) > 1) {
